@@ -18,3 +18,7 @@ CREATE TABLE IF NOT EXISTS Triggers(
     TriggerWord text PRIMARY KEY,
     TriggerText text
 );
+
+CREATE TABLE IF NOT EXISTS qwe(
+    number integer PRIMARY KEY
+    );
