@@ -6,7 +6,7 @@ def update_library():
     print('Updating libraries....')
 
     try:
-        subprocess.check_call('"{}" -m pip install --no-warn-script-location --user -U -r requirements.txt'.format(sys.executable), shell=True)
+        subprocess.check_call('pip3 install -r requirements.txt', shell=True)
     except subprocess.CalledProcessError:
         raise OSError("Could not update libraries.".format(sys.executable))
 
@@ -42,7 +42,7 @@ def main():
 
     from lib.bot import bot
     bot.run()
-    #TEST COMMENT
+    #I WAS HERE
 
 if __name__ == '__main__':
     main()
