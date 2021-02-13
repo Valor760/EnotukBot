@@ -31,11 +31,6 @@ def main():
             print('Passed Git check.....')
 
             try:
-                subprocess.check_call('git reset --hard', shell=True)
-            except subprocess.CalledProcessError:
-                raise OSError("Could not reset the directory!")
-
-            try:
                 subprocess.check_call('git pull', shell=True)
             except subprocess.CalledProcessError:
                 raise OSError("Could not update the bot!")
