@@ -20,6 +20,7 @@ def y_n(q):
 
 
 def main():
+    update_library()
     if platform.system() == 'Linux':
         update = y_n("Update the bot?")
         if update:
