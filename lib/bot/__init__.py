@@ -7,7 +7,6 @@ from lib.db import db
 from datetime import datetime
 import platform
 from random import randint
-from copy import deepcopy
 
 
 if platform.system() == 'Windows':
