@@ -42,7 +42,7 @@ def main():
 
     from lib.bot import bot
     bot.run()
-
+    #TEST COMMENT
 
 if __name__ == '__main__':
     main()
