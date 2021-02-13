@@ -37,7 +37,7 @@ def main():
 
     from lib.bot import bot
     bot.run()
-    #I WAS HERE
+    #TRY NUMBER 9000
 
 if __name__ == '__main__':
     main()
