@@ -1,4 +1,3 @@
-from lib.bot import bot
 import subprocess
 import sys
 import platform
@@ -41,6 +40,7 @@ def main():
             except subprocess.CalledProcessError:
                 raise OSError("Could not update the bot!")
 
+    from lib.bot import bot
     bot.run()
 
 
