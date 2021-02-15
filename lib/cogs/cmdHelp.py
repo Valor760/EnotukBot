@@ -31,7 +31,6 @@ class cmdHelp():
                                    f"Список всех комманд: {self.bot.convert_to_str(cmds)}")
             await sleep(0.5)
             await ctx.channel.send(f"Для большей информации: !help [название_команды]")
-            print(cmdHelp.cmd_help.__doc__)
 
         # Отправляем сведения о команде !help
         # Потому что не могу получить __doc__ от функции cmd_help
