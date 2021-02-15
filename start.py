@@ -37,10 +37,20 @@ def main():
 
             print('Passed Git check.....')
 
-            try:
-                subprocess.check_call('git pull', shell=True)
-            except subprocess.CalledProcessError:
-                raise OSError("Could not update the bot!")
+            sp = subprocess.check_output('git status --porcelain', shell=True, universal_newlines=True)
+            if sp:
+                oshit = y_n('You have modified files that are tracked by Git (e.g the bot\'s source files).\n'
+                            'Should we try resetting the repo? You will lose local modifications.')
+                if oshit:
+                    try:
+                        subprocess.check_call('git reset --hard', shell=True)
+                    except subprocess.CalledProcessError:
+                        raise OSError("Could not reset the directory to a clean state.")
+
+                    try:
+                        subprocess.check_call('git pull', shell=True)
+                    except subprocess.CalledProcessError:
+                        raise OSError("Could not update the bot!")
 
     from lib.bot import bot
     bot.run()
