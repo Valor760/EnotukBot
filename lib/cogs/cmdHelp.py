@@ -21,14 +21,17 @@ class cmdHelp():
     # TODO: СДЕЛАТЬ!!!
     @command(aliases=['help', 'cmdhelp', "команды", "помощь"])
     async def cmd_help(self, ctx, cmd_name = '', mention = ''):
+        '''!help [название команды]'''
         # Отправляем весь список команд
         if cmd_name == '' or cmd_name.startswith('@'):
             cmds = ["!" + key.replace('cmd_', '') for key in self.bot.commands.keys()] + ["!" + key2 for key2 in db.column("SELECT CmdName FROM CustomCMD")]
             cmds.remove("!send_text")
+
             await ctx.channel.send(f"{self.bot.mention(cmd_name)}"
                                    f"Список всех комманд: {self.bot.convert_to_str(cmds)}")
-            await sleep(1)
+            await sleep(0.5)
             await ctx.channel.send(f"Для большей информации: !help [название_команды]")
+            print(cmdHelp.cmd_help.__doc__)
 
         # Отправляем сведения о команде !help
         # Потому что не могу получить __doc__ от функции cmd_help
