@@ -54,7 +54,6 @@ def main():
 
     from lib.bot import bot
     bot.run()
-    #TRY NUMBER 9234
 
 if __name__ == '__main__':
     main()
