@@ -1,3 +1,6 @@
 __pycache__
 *.iml
 venv
+data/db/database.db
+data/db/codes.py
+data/db/tracker_key.py
