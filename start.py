@@ -47,10 +47,10 @@ def main():
                     except subprocess.CalledProcessError:
                         raise OSError("Could not reset the directory to a clean state.")
 
-                    try:
-                        subprocess.check_call('git pull', shell=True)
-                    except subprocess.CalledProcessError:
-                        raise OSError("Could not update the bot!")
+            try:
+                subprocess.check_call('git pull', shell=True)
+            except subprocess.CalledProcessError:
+                raise OSError("Could not update the bot!")
 
     from lib.bot import bot
     bot.run()
