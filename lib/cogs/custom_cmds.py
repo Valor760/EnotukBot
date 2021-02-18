@@ -75,7 +75,7 @@ class customCmds():
                 db.commit()
                 await ctx.channel.send(f"@{ctx.author.name} команда успешно удалена")
 
-    @command(aliases=db.column("SELECT cmdName FROM customCMD"))
+    @command(aliases=db.column("SELECT cmdName FROM CustomCMD"))
     async def cmd_send_text(self, ctx, mention=None):
         await self.__cmd_send_text__(ctx, mention)
 
@@ -94,9 +94,23 @@ class customCmds():
             await ctx.channel.send(f"@{mention.replace('@','')} {cmd_text[0]}")
 
 
+    @command(aliases=['добавитькд', 'addcd', 'addcooldown'])
+    async def cmd_addcd(self, ctx, cmd_name, time: int):
+        if self.bot.check_mod(ctx):
+            if cmd_name.replace('!', '') in db.column("SELECT cmdName FROM customCMD"):
+                db.execute("UPDATE CustomCMD SET CoolDown = ? WHERE CmdName = ?",
+                           time, cmd_name.replace('!', ''))
+                db.commit()
+
+                await ctx.channel.send(f"@{ctx.author.name} кд на команду '{cmd_name}' успешно установлено!")
+            else:
+                await ctx.channel.send(f"@{ctx.author.name} такой команды не существует! Для списка всех команд попробуйте !help")
+
+
     async def event_ready(self):
         if not self.bot.ready:
             self.bot.cogs_ready.ready_up("custom_cmds")
+
 
 def setup(bot):
     bot.add_cog(customCmds(bot))

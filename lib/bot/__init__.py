@@ -46,6 +46,7 @@ class Bot(TwitchBotBase):
 
         self.trigger_words = db.column("SELECT TriggerWord FROM Triggers")
         self.words_on_cooldown = []
+        self.cmds_on_cooldown = []
 
         db.autosave(self.scheduler)
 
@@ -115,7 +116,10 @@ class Bot(TwitchBotBase):
         if not message.content.startswith('!'):
             await self.trigger_message(message)
 
-        await bot.handle_commands(message)
+        if message.content.startswith('!') and message.content.split(' ')[0].replace('!', '') not in self.cmds_on_cooldown:
+            await bot.handle_commands(message)
+            if message.content.split(' ')[0].replace('!', '') in db.column("SELECT cmdName FROM customCMD"):
+                await self.custom_cmd_cooldown(message.content.split(' ')[0].replace('!', ''))
 
         self.msg_count += 1
         await self.send_periodic_msg(message)
@@ -244,6 +248,7 @@ class Bot(TwitchBotBase):
         await ctx.channel.timeout(ctx.author.name)
 
 
+    # Функция триггера на сообщение
     async def trigger_message(self, ctx):
         for word in self.trigger_words:
             if word in ctx.content and word not in self.words_on_cooldown:
@@ -258,6 +263,14 @@ class Bot(TwitchBotBase):
         self.words_on_cooldown.append(word)
         await sleep(30)
         self.words_on_cooldown.remove(word)
+
+
+    async def custom_cmd_cooldown(self, cmd_name):
+        cooldown = int(db.column("SELECT CoolDown FROM CustomCMD WHERE CmdName = ?",
+                             cmd_name)[0])
+        self.cmds_on_cooldown.append(cmd_name)
+        await sleep(cooldown)
+        self.cmds_on_cooldown.remove(cmd_name)
 
 
 

@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS CustomCMD(
     CmdName text PRIMARY KEY,
-    CmdText text
+    CmdText text,
+    CoolDown integer DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS SchedCMDS(

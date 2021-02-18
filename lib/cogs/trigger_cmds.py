@@ -11,6 +11,8 @@ class triggerCmds():
     @command(aliases=['addtrigger', 'добавитьтриггер'])
     async def cmd_addtrigger(self, ctx, trigger_word, *trigger_text):
         if self.bot.check_mod(ctx):
+            if '_' in trigger_word:
+                trigger_word = self.bot.convert_to_str(trigger_word.split('_'))
 
             self.bot.trigger_words.append(trigger_word)
             trigger_text = self.bot.convert_to_str(trigger_text)
