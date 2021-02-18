@@ -219,7 +219,7 @@ class Bot(TwitchBotBase):
 
                 else:
                     await ctx.channel.send(f"@{ctx.author.name} пользователь {user_on_timeout} не может быть замьючен, "
-                                           f"потому что получал уже получал мут за последние 24 часа")
+                                           f"потому что уже получал мут за последние 24 часа")
 
 
     async def check_on_user_role(self, user_on_timeout):
