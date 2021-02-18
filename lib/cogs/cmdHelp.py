@@ -94,7 +94,7 @@ class cmdHelp():
             await ctx.channel.send(f'Сегодня мут получали: {self.bot.convert_to_str(users)}')
 
 
-    @command(aliases=['follow', 'followtime', 'фоллоу'])
+    @command(aliases=['follow', 'followtime', 'фоллоу', 'followage'])
     async def cmd_followtime(self, ctx, mention = ''):
 
         if mention == '':
