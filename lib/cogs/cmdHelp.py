@@ -229,11 +229,6 @@ class cmdHelp:
             return f'{min} минут '
 
 
-    @command(aliases=['qwe'])
-    async def cmd_qwe(self, ctx):
-        print(self.__class__.cmd_followtime.__doc__)
-
-
     async def event_ready(self):
         if not self.bot.ready:
             self.bot.cogs_ready.ready_up("cmdHelp")
