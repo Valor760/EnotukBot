@@ -3,7 +3,7 @@ from lib.db import db
 from asyncio import sleep
 
 
-@cog(name="cmdSchedule")
+
 class cmdSchedule():
     def __init__(self, bot):
         self.bot = bot
@@ -62,5 +62,5 @@ class cmdSchedule():
             self.bot.cogs_ready.ready_up("sched_cmds")
 
 
-def setup(bot):
+def prepare(bot):
     bot.add_cog(cmdSchedule(bot))

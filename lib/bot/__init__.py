@@ -7,6 +7,7 @@ from lib.db import db
 from datetime import datetime
 import platform
 from random import randint
+from twitchio.ext.commands import command, Command
 
 
 if platform.system() == 'Windows':
@@ -272,6 +273,14 @@ class Bot(TwitchBotBase):
         await sleep(cooldown)
         self.cmds_on_cooldown.remove(cmd_name)
 
+
+    def get_cog(self, name):
+        return self.cogs.get(name)
+
+
+    # @command(aliases=['test'])
+    # async def cmd_test(self, ctx, cmd_name = ''):
+    #     print()
 
 
 bot = Bot()

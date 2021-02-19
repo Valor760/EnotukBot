@@ -3,7 +3,6 @@ from twitchio.ext.commands import command
 from ..db import db
 
 
-@cog(name="customCmds")
 class customCmds():
     def __init__(self, bot):
         self.bot = bot
@@ -112,5 +111,5 @@ class customCmds():
             self.bot.cogs_ready.ready_up("custom_cmds")
 
 
-def setup(bot):
+def prepare(bot):
     bot.add_cog(customCmds(bot))

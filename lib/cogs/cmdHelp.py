@@ -8,13 +8,13 @@ import json
 from calendar import monthrange
 
 
-@cog(name="cmdHelp")
-class cmdHelp():
+class cmdHelp:
+    '''CLass doc'''
     def __init__(self, bot):
         self.bot = bot
         self.params = {'Accept' : 'application/vnd.twitchtv.v5+json',
                        'client-id': '1gkf7h1glsxebahdji24zy53r423vm'}
-
+        self.qwe = self.cmd_help.__doc__
 
     COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 
@@ -96,6 +96,7 @@ class cmdHelp():
 
     @command(aliases=['follow', 'followtime', 'фоллоу', 'followage'])
     async def cmd_followtime(self, ctx, mention = ''):
+        '''Some shit'''
 
         if mention == '':
             mention = ctx.author.name
@@ -228,10 +229,15 @@ class cmdHelp():
             return f'{min} минут '
 
 
+    @command(aliases=['qwe'])
+    async def cmd_qwe(self, ctx):
+        print(self.__class__.cmd_followtime.__doc__)
+
+
     async def event_ready(self):
         if not self.bot.ready:
             self.bot.cogs_ready.ready_up("cmdHelp")
 
 
-def setup(bot):
+def prepare(bot):
     bot.add_cog(cmdHelp(bot))

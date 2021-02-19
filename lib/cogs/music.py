@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 
 
-@cog(name='music')
+
 class music():
     def __init__(self, bot):
         self.bot = bot
@@ -48,5 +48,5 @@ class music():
             self.bot.cogs_ready.ready_up("music")
 
 
-def setup(bot):
+def prepare(bot):
     bot.add_cog(music(bot))

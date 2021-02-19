@@ -2,7 +2,7 @@ from twitchio.ext.commands import cog, command
 from ..db import db
 
 
-@cog(name='triggerCmds')
+
 class triggerCmds():
     def __init__(self, bot):
         self.bot = bot
@@ -71,5 +71,5 @@ class triggerCmds():
             self.bot.cogs_ready.ready_up("trigger_cmds")
 
 
-def setup(bot):
+def prepare(bot):
     bot.add_cog(triggerCmds(bot))
