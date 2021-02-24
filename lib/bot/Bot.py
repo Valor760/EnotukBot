@@ -118,7 +118,7 @@ class Bot(TwitchBotBase):
             await self.trigger_message(message)
 
         if message.content.split(' ')[0].replace('!', '') in self.cmds_on_cooldown:
-            await message.channel.send(f'@{message.author} команда {message.content.split(" ")[0].replace("!", "")} в кд!')
+            await message.channel.send(f'@{message.author.name} команда "{message.content.split(" ")[0].replace("!", "")}" в кд!')
         else:
             if message.content.startswith('!'):
                 await self.handle_commands(message)
