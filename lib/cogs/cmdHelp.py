@@ -1,4 +1,4 @@
-from twitchio.ext.commands import cog, command
+from twitchio.ext.commands import command, Command
 from glob import glob
 from ..db import db
 from asyncio import sleep
@@ -19,7 +19,7 @@ class cmdHelp:
     COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 
     # TODO: СДЕЛАТЬ!!!
-    @command(aliases=['help', 'cmdhelp', "команды", "помощь"])
+    @command(name='help', aliases=['cmdhelp', "команды", "помощь"])
     async def cmd_help(self, ctx, cmd_name = '', mention = ''):
         '''!help [название команды]'''
         # Отправляем весь список команд
@@ -227,6 +227,15 @@ class cmdHelp:
 
         else:
             return f'{min} минут '
+
+    @command(aliases=['test'])
+    async def cmd_test(self, ctx, cmd_name = ''):
+        print(self.bot.commands)
+        cmd = self.bot.commands.get('help')
+        print(cmd)
+        qwe = cmd.instance
+        print(qwe.cmd_help.__doc__)
+
 
 
     async def event_ready(self):
