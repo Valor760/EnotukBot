@@ -117,10 +117,14 @@ class Bot(TwitchBotBase):
         if not message.content.startswith('!'):
             await self.trigger_message(message)
 
-        if message.content.split(' ')[0].replace('!', '') in self.cmds_on_cooldown:
-            await message.channel.send(f'@{message.author.name} команда "{message.content.split(" ")[0].replace("!", "")}" в кд!')
-        else:
-            if message.content.startswith('!'):
+        if message.content.startswith('!'):
+            cmd = message.content.split(' ')[0].lower()
+            msg = message.content.split(' ')[1:]
+            message.content = cmd + self.convert_to_str(msg)
+
+            if message.content.split(' ')[0].replace('!', '') in self.cmds_on_cooldown:
+                await message.channel.send(f'@{message.author.name} команда "{message.content.split(" ")[0].replace("!", "")}" в кд!')
+            else:
                 await self.handle_commands(message)
                 if message.content.split(' ')[0].replace('!', '') in db.column("SELECT cmdName FROM customCMD"):
                     await self.custom_cmd_cooldown(message.content.split(' ')[0].replace('!', ''))

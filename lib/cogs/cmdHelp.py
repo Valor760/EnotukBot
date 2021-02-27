@@ -228,14 +228,11 @@ class cmdHelp:
         else:
             return f'{min} минут '
 
-    @command(aliases=['test'])
-    async def cmd_test(self, ctx, cmd_name = ''):
-        print(self.bot.commands)
-        cmd = self.bot.commands.get('help')
-        print(cmd)
-        qwe = cmd.instance
-        print(qwe.cmd_help.__doc__)
-
+    # @command(aliases=['test'])
+    # async def cmd_test(self, ctx, cmd_name = ''):
+    #     print(self.bot.commands)
+    #     cmd = self.bot.commands.get('help')
+    #     print(cmd('help').__doc__)
 
 
     async def event_ready(self):
