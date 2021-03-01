@@ -1,4 +1,3 @@
-from twitchio.ext.commands import cog
 from twitchio.ext.commands import command
 from ..db import db
 
@@ -8,10 +7,7 @@ class customCmds():
         self.bot = bot
 
     @command(aliases=["addcom", "add", "добавить", "добавитькоманду"])
-    async def cmd_add(self, ctx, cmd_name, *text):
-        """
-        bla bla bla
-        """
+    async def cmd_add_adm(self, ctx, cmd_name, *text):
         if self.bot.check_mod(ctx):
 
             if cmd_name.startswith('!'):
@@ -36,7 +32,7 @@ class customCmds():
 
 
     @command(aliases=["edit", "editcom", "ред", "редактировать", "обновить"])
-    async def cmd_edit(self, ctx, cmd_name, *text):
+    async def cmd_edit_adm(self, ctx, cmd_name, *text):
         if self.bot.check_mod(ctx):
 
             if cmd_name.startswith('!'):
@@ -56,7 +52,7 @@ class customCmds():
 
 
     @command(aliases=["delete", "del", "delcom", "удалить", "удалитькомманду"])
-    async def cmd_delete(self, ctx, cmd_name):
+    async def cmd_delete_adm(self, ctx, cmd_name):
         '''
         !del <название команды>  ---  удаляет указанную команду
         '''
@@ -73,6 +69,7 @@ class customCmds():
                            cmd_name)
                 db.commit()
                 await ctx.channel.send(f"@{ctx.author.name} команда успешно удалена")
+
 
     @command(aliases=db.column("SELECT cmdName FROM CustomCMD"))
     async def cmd_send_text(self, ctx, mention=None):
@@ -94,7 +91,7 @@ class customCmds():
 
 
     @command(aliases=['добавитькд', 'addcd', 'addcooldown'])
-    async def cmd_addcd(self, ctx, cmd_name, time: int):
+    async def cmd_addcd_adm(self, ctx, cmd_name, time: int):
         if self.bot.check_mod(ctx):
             if cmd_name.replace('!', '') in db.column("SELECT cmdName FROM customCMD"):
                 db.execute("UPDATE CustomCMD SET CoolDown = ? WHERE CmdName = ?",

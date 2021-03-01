@@ -1,4 +1,4 @@
-from twitchio.ext.commands import cog, command
+from twitchio.ext.commands import command
 from ..db import db
 
 
@@ -9,7 +9,7 @@ class triggerCmds():
 
 
     @command(aliases=['addtrigger', 'добавитьтриггер'])
-    async def cmd_addtrigger(self, ctx, trigger_word, *trigger_text):
+    async def cmd_addtrigger_adm(self, ctx, trigger_word, *trigger_text):
         if self.bot.check_mod(ctx):
             if '_' in trigger_word:
                 trigger_word = self.bot.convert_to_str(trigger_word.split('_'))
@@ -27,7 +27,7 @@ class triggerCmds():
 
 
     @command(aliases=['deltrigger', 'удалитьтриггер'])
-    async def cmd_deltrigger(self, ctx, trigger_word):
+    async def cmd_deltrigger_adm(self, ctx, trigger_word):
         if self.bot.check_mod(ctx):
 
             if trigger_word in db.column("SELECT TriggerWord FROM Triggers"):
@@ -46,7 +46,7 @@ class triggerCmds():
 
 
     @command(aliases=['edittrigger', 'обновитьтриггер'])
-    async def cmd_edittrigger(self, ctx, trigger_word, *new_text):
+    async def cmd_edittrigger_adm(self, ctx, trigger_word, *new_text):
         if self.bot.check_mod(ctx):
 
             if trigger_word in db.column("SELECT TriggerWord FROM Triggers"):

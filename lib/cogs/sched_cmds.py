@@ -1,7 +1,6 @@
-from twitchio.ext.commands import cog, command
+from twitchio.ext.commands import command
 from lib.db import db
 from asyncio import sleep
-
 
 
 class cmdSchedule():
@@ -10,7 +9,7 @@ class cmdSchedule():
 
 
     @command(aliases=["addperiod", "добавитьпериод"])
-    async def cmd_addperiod(self, ctx, *text):
+    async def cmd_addperiod_adm(self, ctx, *text):
         if self.bot.check_mod(ctx):
             cmd_text = self.bot.convert_to_str(text)
             db.execute("INSERT OR IGNORE INTO SchedCMDS (CmdText) VALUES (?)",
@@ -21,7 +20,7 @@ class cmdSchedule():
 
 
     @command(aliases=["delperiod", "удалитьпериод"])
-    async def cmd_delperiod(self, ctx, cmd_num: int):
+    async def cmd_delperiod_adm(self, ctx, cmd_num: int):
         if self.bot.check_mod(ctx):
             if cmd_num <= len(db.column("SELECT CmdText FROM SchedCMDS")) and cmd_num > 0 :
                 db.execute("DELETE FROM SchedCMDS WHERE CmdText = ?",
@@ -43,7 +42,7 @@ class cmdSchedule():
 
 
     @command(aliases=["editperiod", "изменитьпериод"])
-    async def cmd_editperiod(self, ctx, cmd_num: int, new_text):
+    async def cmd_editperiod_adm(self, ctx, cmd_num: int, new_text):
         if self.bot.check_mod(ctx):
             if cmd_num <= len(db.column("SELECT CmdText FROM SchedCMDS")) and cmd_num > 0 :
                 db.execute("UPDATE SchedCMDS SET CmdText = ? WHERE CmdText = ?",
