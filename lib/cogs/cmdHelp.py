@@ -113,7 +113,6 @@ class cmdHelp:
 
         user_id = json.loads(get(f'https://api.twitch.tv/kraken/users?login={mention}', headers = self.params).text)['users'][0]['_id']
 
-
         user_follow_time = json.loads(get(f'https://api.twitch.tv/kraken/users/{user_id}'
                                           f'/follows/channels/108997445', headers=self.params).text)
 
@@ -234,11 +233,10 @@ class cmdHelp:
         else:
             return f'{min} минут '
 
-    # @command(aliases=['test'])
-    # async def cmd_test(self, ctx, cmd_name = ''):
-    #     print(self.bot.commands)
-    #     cmd = self.bot.commands.get('help')
-    #     print(cmd('help').__doc__)
+    @command(aliases=['test'])
+    async def cmd_test(self, ctx, cmd_name = ''):
+        qwe = await self.bot.get_chatters("enoootuuuk")
+        print(qwe[3])
 
 
     async def event_ready(self):

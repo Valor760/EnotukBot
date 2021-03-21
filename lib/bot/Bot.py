@@ -180,9 +180,7 @@ class Bot(TwitchBotBase):
     async def points_timeout(self, ctx):
         user_on_timeout = ctx.content.split(' ')[0].lower()
         user_on_timeout = user_on_timeout.replace(',', '')
-
-        if user_on_timeout.startswith('@'):
-            user_on_timeout = user_on_timeout[1:]
+        user_on_timeout = user_on_timeout.replace('@', '')
 
         user_role = await self.check_on_user_role(user_on_timeout)
 
@@ -194,6 +192,9 @@ class Bot(TwitchBotBase):
 
         elif user_role == 'streamer':
             await ctx.channel.send(f"@{ctx.author.name} вы не можете замутить стримера!")
+
+        elif user_role == 'not_in_chat':
+            await ctx.channel.send(f"@{ctx.author.name} пользователя нет в чате, или твич еще не обновил его присутствие!")
 
         else:
             cur_day = int(datetime.utcnow().strftime("%d"))
@@ -239,8 +240,8 @@ class Bot(TwitchBotBase):
         mods = chatters[4]
         vips = chatters[3]
 
-        if user_on_timeout.startswith('@'):
-            user_on_timeout = user_on_timeout[1:]
+        user_on_timeout = user_on_timeout.replace('@', '')
+        user_on_timeout = user_on_timeout.replace(',', '')
 
         if user_on_timeout.lower() in mods:
             return 'mods'
@@ -250,6 +251,9 @@ class Bot(TwitchBotBase):
 
         elif user_on_timeout.lower() == 'enoootuuuk':
             return "streamer"
+
+        elif user_on_timeout.lower() not in chatters[1]:
+            return 'not_in_chat'
 
 
     async def points_timeout_self(self, ctx):
@@ -288,4 +292,3 @@ class Bot(TwitchBotBase):
     # @command(aliases=['test'])
     # async def cmd_test(self, ctx, cmd_name = ''):
     #     print()
-
