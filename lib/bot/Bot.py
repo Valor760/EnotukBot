@@ -240,8 +240,9 @@ class Bot(TwitchBotBase):
         mods = chatters[4]
         vips = chatters[3]
 
-        user_on_timeout = user_on_timeout.replace('@', '')
-        user_on_timeout = user_on_timeout.replace(',', '')
+        for i in range(len(user_on_timeout)):
+            if not user_on_timeout[i].isdigit() or not user_on_timeout[i].isalfa():
+                user_on_timeout = user_on_timeout.replace(user_on_timeout[i], '')
 
         if user_on_timeout.lower() in mods:
             return 'mods'
