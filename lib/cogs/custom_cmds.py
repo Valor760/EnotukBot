@@ -11,13 +11,12 @@ class customCmds():
         if self.bot.check_mod(ctx):
 
             if cmd_name.startswith('!'):
-                cmd_name = cmd_name[1:]
+                cmd_name = cmd_name.replace('!', '')
 
             values = db.column("SELECT CmdName FROM CustomCMD")
 
             if cmd_name in values:
                 await ctx.channel.send(f"@{ctx.author.name} такая команда уже существует. Переименуйте новую команду или удалите старую")
-
             else:
                 db.execute("INSERT OR IGNORE INTO CustomCMD (CmdName) VALUES (?)",
                            cmd_name)
@@ -59,15 +58,15 @@ class customCmds():
         if self.bot.check_mod(ctx):
 
             if cmd_name.startswith('!'):
-                cmd_name = cmd_name[1:]
+                cmd_name = cmd_name.replace('!', '')
 
             if cmd_name not in db.column("SELECT CmdName FROM CustomCMD"):
                 await ctx.channel.send(f"@{ctx.author.name} такой команды не существует. Список команд - !команды")
-
             else:
                 db.execute("DELETE FROM CustomCMD WHERE CmdName = ?",
                            cmd_name)
                 db.commit()
+                self.bot.remove_command(command(name=cmd_name)(self.__cmd_send_text__))
                 await ctx.channel.send(f"@{ctx.author.name} команда успешно удалена")
 
 
