@@ -22,21 +22,67 @@ class cmdHelp:
         '''!help [название команды]'''
         # Отправляем весь список команд
         if (cmd_name == '' or cmd_name.startswith('@')) and not self.bot.check_mod(ctx):
-            cmds = ["!" + key.replace('cmd_', '') for key in self.bot.commands.keys() if '_adm' not in key] + ["!" + key2 for key2 in db.column("SELECT CmdName FROM CustomCMD")]
-            cmds.remove("!send_text")
+            # cmds = ["!" + key.replace('cmd_', '') for key in self.bot.commands.keys() if '_adm' not in key] + ["!" + key2 for key2 in db.column("SELECT CmdName FROM CustomCMD")]
+            # cmds.remove("!send_text")
+
+            has_sent = False
+            cmds = []
+            for key in list(self.bot.commands.keys()) + db.column("SELECT CmdName FROM CustomCMD"):
+                if '_adm' not in key:
+                    if len(self.bot.convert_to_str(cmds + ["!" + str(key).replace('cmd_', '')])) < 450:
+                        cmds.append("!" + str(key).replace('cmd_', ''))
+                        if "!send_text" in cmds:
+                            cmds.remove("!send_text")
+                    else:
+                        await ctx.channel.send(f"{self.bot.mention(cmd_name)}"
+                                               f"Список всех комманд: {self.bot.convert_to_str(cmds)}")
+                        await sleep(0.5)
+                        cmds = []
+                        has_sent = True
+
+            if has_sent:
+                await ctx.channel.send(f"{self.bot.mention(cmd_name)}{self.bot.convert_to_str(cmds)}")
+            else:
+                await ctx.channel.send(f"{self.bot.mention(cmd_name)}"
+                                       f"Список всех комманд: {self.bot.convert_to_str(cmds)}")
+            #await ctx.channel.send(f"Для большей информации: !help [название_команды]")
+
+        elif self.bot.check_mod(ctx):
+            # cmds = ["!" + key.replace('cmd_', '').replace('_adm', '') for key in self.bot.commands.keys()] + ["!" + key2 for key2 in db.column("SELECT CmdName FROM CustomCMD")]
+            # cmds.remove("!send_text")
+            #
+            # await ctx.channel.send(f"Список всех комманд: {self.bot.convert_to_str(cmds)}")
+            # await sleep(0.5)
+            # await ctx.channel.send(f"Для большей информации: !help [название_команды]")
+            has_sent = False
+            cmds = []
+            cmds_adm = []
+            for key in list(self.bot.commands.keys()) + db.column("SELECT CmdName FROM CustomCMD"):
+                if len(self.bot.convert_to_str(cmds + ["!" + str(key).replace('cmd_', '').replace('_adm', '')])) < 450:
+                    if '_adm' in key:
+                        cmds_adm.append("!" + str(key).replace('cmd_', '').replace('_adm', ''))
 
             await ctx.channel.send(f"{self.bot.mention(cmd_name)}"
-                                   f"Список всех комманд: {self.bot.convert_to_str(cmds)}")
-            await sleep(0.5)
-            await ctx.channel.send(f"Для большей информации: !help [название_команды]")
+                                   f"Список комманд модераторов: {self.bot.convert_to_str(cmds_adm)}")
 
-        elif ctx.author.name.lower() == 'valor760' or self.bot.check_mod(ctx):
-            cmds = ["!" + key.replace('cmd_', '').replace('_adm', '') for key in self.bot.commands.keys()] + ["!" + key2 for key2 in db.column("SELECT CmdName FROM CustomCMD")]
-            cmds.remove("!send_text")
+            for key in list(self.bot.commands.keys()) + db.column("SELECT CmdName FROM CustomCMD"):
+                if '_adm' not in str(key):
+                    if len(self.bot.convert_to_str(cmds + ["!" + str(key).replace('cmd_', '')])) < 450:
+                        cmds.append("!" + str(key).replace('cmd_', ''))
+                        if "!send_text" in cmds:
+                            cmds.remove("!send_text")
+                    else:
+                        await ctx.channel.send(f"{self.bot.mention(cmd_name)}"
+                                               f"Список всех комманд: {self.bot.convert_to_str(cmds)}")
+                        await sleep(0.5)
+                        cmds = []
+                        has_sent = True
 
-            await ctx.channel.send(f"Список всех комманд: {self.bot.convert_to_str(cmds)}")
-            await sleep(0.5)
-            await ctx.channel.send(f"Для большей информации: !help [название_команды]")
+            if has_sent:
+                await ctx.channel.send(f"{self.bot.mention(cmd_name)}{self.bot.convert_to_str(cmds)}")
+            else:
+                await ctx.channel.send(f"{self.bot.mention(cmd_name)}"
+                                       f"Список всех комманд: {self.bot.convert_to_str(cmds)}")
 
         # Отправляем сведения о команде !help
         # Потому что не могу получить __doc__ от функции cmd_help
@@ -233,10 +279,10 @@ class cmdHelp:
         else:
             return f'{min} минут '
 
-    @command(aliases=['test'])
-    async def cmd_test(self, ctx, cmd_name = ''):
-        qwe = await self.bot.get_chatters("enoootuuuk")
-        print(qwe[3])
+    # @command(aliases=['test'])
+    # async def cmd_test(self, ctx, cmd_name = ''):
+    #     qwe = await self.bot.get_chatters("enoootuuuk")
+    #     print(qwe[3])
 
 
     async def event_ready(self):
