@@ -20,7 +20,6 @@ class cmdHelp:
     @command(name='help', aliases=['cmdhelp', "команды", "помощь", 'commands'])
     async def cmd_help(self, ctx, cmd_name = '', mention = ''):
         '''!help [название команды]'''
-        # Отправляем весь список команд
         if (cmd_name == '' or cmd_name.startswith('@')) and not self.bot.check_mod(ctx):
             # cmds = ["!" + key.replace('cmd_', '') for key in self.bot.commands.keys() if '_adm' not in key] + ["!" + key2 for key2 in db.column("SELECT CmdName FROM CustomCMD")]
             # cmds.remove("!send_text")

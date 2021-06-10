@@ -18,6 +18,13 @@ elif platform.system() == 'Linux':
 
 IGNORE_EXCEPTIONS = []
 
+def log(msg, prnt: bool):
+    if prnt:
+        print(f"[{datetime.utcnow()}] {msg}")
+
+    with open("../../data/log.txt", 'a') as f:
+        f.write(f"[{datetime.utcnow()}] {msg}")
+
 
 class Ready(object):
     def __init__(self):
@@ -27,7 +34,7 @@ class Ready(object):
 
     def ready_up(self, cog):
         setattr(self, cog, True)
-        print(f"> {cog} cog ready")
+        log(f"> {cog} cog ready", True)
 
 
     def all_ready(self):
@@ -67,14 +74,14 @@ class Bot(TwitchBotBase):
     def setup(self):
         for cog in COGS:
             self.load_module(f"lib.cogs.{cog}")
-            print(f"--- {cog} cog is loaded")
+            log(f"--- {cog} cog is loaded", True)
 
 
     def run(self):
-        print("RUNNING SETUP.....")
+        log("RUNNING SETUP.....", True)
         self.setup()
 
-        print("RUNNING BOT.....")
+        log("RUNNING BOT.....", True)
         super().run()
 
 
@@ -97,14 +104,15 @@ class Bot(TwitchBotBase):
                 await sleep(0.5)
 
             self.ready = True
-            print(">>Bot Ready<<")
+            log(">>Bot Ready<<", True)
 
 
     async def event_message(self, message):
         if message.author.name.lower() == BOT_NICK.lower():
+            log(f"[{message.author.name}]:   {message.content}", False)
             return
-        print(f"({message.channel})[{message.author.name}]:   {message.content}")
 
+        log(f"[{message.author.name}]:   {message.content}", True)
 
         if 'custom-reward-id' in message.tags:
 
@@ -182,6 +190,9 @@ class Bot(TwitchBotBase):
         user_on_timeout = user_on_timeout.replace(',', '')
         user_on_timeout = user_on_timeout.replace('@', '')
 
+        log(f"Таймаут за поинты пользователя: {user_on_timeout}\n"
+            f"[{ctx.author.name}]:   {ctx.content}", False)
+
         user_role = await self.check_on_user_role(user_on_timeout)
 
         if user_role == 'mods':
@@ -208,7 +219,7 @@ class Bot(TwitchBotBase):
                            cur_day, cur_month, cur_year, user_on_timeout)
                 db.commit()
 
-                await ctx.channel.timeout(user_on_timeout)
+                await ctx.channel.timeout(user_on_timeout, reason = "таймаут за поинты")
                 await sleep(0.5)
                 await ctx.channel.send(f"{user_on_timeout} получил мут на 10 минут! Кто следующий?")
 
@@ -226,7 +237,7 @@ class Bot(TwitchBotBase):
                                cur_day, cur_month, cur_year, user_on_timeout)
                     db.commit()
 
-                    await ctx.channel.timeout(user_on_timeout)
+                    await ctx.channel.timeout(user_on_timeout, reason = "таймаут за поинты")
                     await sleep(0.5)
                     await ctx.channel.send(f"{user_on_timeout} получил мут на 10 минут! Кто следующий?")
 
@@ -260,7 +271,9 @@ class Bot(TwitchBotBase):
 
 
     async def points_timeout_self(self, ctx):
-        await ctx.channel.timeout(ctx.author.name)
+        log(f"Самотаймаут\n"
+            f"[{ctx.author.name}]:   {ctx.content}", False)
+        await ctx.channel.timeout(ctx.author.name, reason="Самотаймаут")
 
 
     # Функция триггера на сообщение
