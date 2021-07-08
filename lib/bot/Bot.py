@@ -41,7 +41,7 @@ class Ready(object):
 
     def ready_up(self, cog):
         setattr(self, cog, True)
-        await log(f"> {cog} cog ready", True)
+        log(f"> {cog} cog ready", True)
 
 
     def all_ready(self):
@@ -81,14 +81,14 @@ class Bot(TwitchBotBase):
     def setup(self):
         for cog in COGS:
             self.load_module(f"lib.cogs.{cog}")
-            await log(f"--- {cog} cog is loaded", True)
+            log(f"--- {cog} cog is loaded", True)
 
 
     def run(self):
-        await log("RUNNING SETUP.....", True)
+        log("RUNNING SETUP.....", True)
         self.setup()
 
-        await log("RUNNING BOT.....", True)
+        log("RUNNING BOT.....", True)
         super().run()
 
 
