@@ -1,3 +1,7 @@
 __pycache__
-*.iml
 venv
+data/db/codes.py
+data/db/database.db
+data/db/tracker_key.py
+enotuuk bot.iml
+.idea
