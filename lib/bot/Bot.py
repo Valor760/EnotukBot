@@ -274,9 +274,10 @@ class Bot(TwitchBotBase):
 
 
     async def points_timeout_self(self, ctx):
-        await log(f"Self timeout\n"
+        log(f"Self timeout\n"
             f"[{ctx.author.name}]:   {ctx.content}", False)
         await ctx.channel.timeout(ctx.author.name, reason="Самотаймаут")
+
 
 
     # Функция триггера на сообщение
