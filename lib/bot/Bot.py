@@ -19,9 +19,9 @@ elif platform.system() == 'Linux':
 
 IGNORE_EXCEPTIONS = []
 
-async def log(msg, prnt: bool):
+def log(msg, prnt: bool):
     if prnt:
-        print(f"[{datetime.utcnow()}] {msg}")
+        print(f"[{str(datetime.utcnow())[:-7]}] {msg}")
 
     if not exists("././data/log.txt"):
         file = open("././data/log.txt", 'w')
@@ -29,7 +29,7 @@ async def log(msg, prnt: bool):
         file.close()
 
     with open("././data/log.txt", 'a') as f:
-        f.write(f"[{datetime.utcnow()}] {msg}\n")
+        f.write(f"[{str(datetime.utcnow())[:-7]}] {msg}\n")
         f.close()
 
 
@@ -111,15 +111,15 @@ class Bot(TwitchBotBase):
                 await sleep(0.5)
 
             self.ready = True
-            await log(">>Bot Ready<<", True)
+            log(">>Bot Ready<<", True)
 
 
     async def event_message(self, message):
         if message.author.name.lower() == BOT_NICK.lower():
-            await log(f"[{message.author.name}]:   {message.content}", False)
+            log(f"[{message.author.name}]:   {message.content}", False)
             return
 
-        await log(f"[{message.author.name}]:   {message.content}", True)
+        log(f"[{message.author.name}]:   {message.content}", True)
 
         if 'custom-reward-id' in message.tags:
 
@@ -197,7 +197,7 @@ class Bot(TwitchBotBase):
         user_on_timeout = user_on_timeout.replace(',', '')
         user_on_timeout = user_on_timeout.replace('@', '')
 
-        await log(f"User timeout(points): {user_on_timeout}\n"
+        log(f"User timeout(points): {user_on_timeout}\n"
             f"[{ctx.author.name}]:   {ctx.content}", False)
 
         user_role = await self.check_on_user_role(user_on_timeout)
@@ -255,14 +255,10 @@ class Bot(TwitchBotBase):
 
     async def check_on_user_role(self, user_on_timeout):
         chatters = await self.get_chatters('enoootuuuk')
-        mods = chatters[4]
-        vips = chatters[3]
-        user_on_timeout = user_on_timeout.replace('@', '')
-        user_on_timeout = user_on_timeout.replace(',', '')
-
-        # for i in range(len(user_on_timeout)):
-        #     if not user_on_timeout[i].isdigit() or not user_on_timeout[i].isalfa():
-        #         user_on_timeout = user_on_timeout.replace(user_on_timeout[i], '')
+        mods = [chatter.lower() for chatter in chatters[4]]
+        vips = [chatter.lower() for chatter in chatters[3]]
+        regular_users = [chatter.lower() for chatter in chatters[1]]
+        user_on_timeout = user_on_timeout.replace('@', '').replace(',', '')
 
         if user_on_timeout.lower() in mods:
             return 'mods'
@@ -273,7 +269,7 @@ class Bot(TwitchBotBase):
         elif user_on_timeout.lower() == 'enoootuuuk':
             return "streamer"
 
-        elif user_on_timeout.lower() not in chatters[1]:
+        elif user_on_timeout.lower() not in regular_users:
             return 'not_in_chat'
 
 
