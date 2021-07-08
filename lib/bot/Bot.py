@@ -7,7 +7,8 @@ from lib.db import db
 from datetime import datetime
 import platform
 from random import randint
-from twitchio.ext.commands import command
+# from twitchio.ext.commands import command
+from os.path import exists
 
 
 if platform.system() == 'Windows':
@@ -18,12 +19,18 @@ elif platform.system() == 'Linux':
 
 IGNORE_EXCEPTIONS = []
 
-def log(msg, prnt: bool):
+async def log(msg, prnt: bool):
     if prnt:
         print(f"[{datetime.utcnow()}] {msg}")
 
-    with open("../../data/log.txt", 'a') as f:
-        f.write(f"[{datetime.utcnow()}] {msg}")
+    if not exists("././data/log.txt"):
+        file = open("././data/log.txt", 'w')
+        file.write('')
+        file.close()
+
+    with open("././data/log.txt", 'a') as f:
+        f.write(f"[{datetime.utcnow()}] {msg}\n")
+        f.close()
 
 
 class Ready(object):
@@ -34,7 +41,7 @@ class Ready(object):
 
     def ready_up(self, cog):
         setattr(self, cog, True)
-        log(f"> {cog} cog ready", True)
+        await log(f"> {cog} cog ready", True)
 
 
     def all_ready(self):
@@ -74,14 +81,14 @@ class Bot(TwitchBotBase):
     def setup(self):
         for cog in COGS:
             self.load_module(f"lib.cogs.{cog}")
-            log(f"--- {cog} cog is loaded", True)
+            await log(f"--- {cog} cog is loaded", True)
 
 
     def run(self):
-        log("RUNNING SETUP.....", True)
+        await log("RUNNING SETUP.....", True)
         self.setup()
 
-        log("RUNNING BOT.....", True)
+        await log("RUNNING BOT.....", True)
         super().run()
 
 
@@ -104,15 +111,15 @@ class Bot(TwitchBotBase):
                 await sleep(0.5)
 
             self.ready = True
-            log(">>Bot Ready<<", True)
+            await log(">>Bot Ready<<", True)
 
 
     async def event_message(self, message):
         if message.author.name.lower() == BOT_NICK.lower():
-            log(f"[{message.author.name}]:   {message.content}", False)
+            await log(f"[{message.author.name}]:   {message.content}", False)
             return
 
-        log(f"[{message.author.name}]:   {message.content}", True)
+        await log(f"[{message.author.name}]:   {message.content}", True)
 
         if 'custom-reward-id' in message.tags:
 
@@ -190,7 +197,7 @@ class Bot(TwitchBotBase):
         user_on_timeout = user_on_timeout.replace(',', '')
         user_on_timeout = user_on_timeout.replace('@', '')
 
-        log(f"Таймаут за поинты пользователя: {user_on_timeout}\n"
+        await log(f"User timeout(points): {user_on_timeout}\n"
             f"[{ctx.author.name}]:   {ctx.content}", False)
 
         user_role = await self.check_on_user_role(user_on_timeout)
@@ -271,7 +278,7 @@ class Bot(TwitchBotBase):
 
 
     async def points_timeout_self(self, ctx):
-        log(f"Самотаймаут\n"
+        await log(f"Self timeout\n"
             f"[{ctx.author.name}]:   {ctx.content}", False)
         await ctx.channel.timeout(ctx.author.name, reason="Самотаймаут")
 
