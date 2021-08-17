@@ -1,0 +1,13 @@
+[2021-08-17 18:19:15] RUNNING SETUP.....
+[2021-08-17 18:19:15] --- cmdHelp cog is loaded
+[2021-08-17 18:19:15] --- custom_cmds cog is loaded
+[2021-08-17 18:19:15] --- music cog is loaded
+[2021-08-17 18:19:15] --- sched_cmds cog is loaded
+[2021-08-17 18:19:15] --- trigger_cmds cog is loaded
+[2021-08-17 18:19:15] RUNNING BOT.....
+[2021-08-17 18:19:16] > cmdHelp cog ready
+[2021-08-17 18:19:16] > custom_cmds cog ready
+[2021-08-17 18:19:16] > music cog ready
+[2021-08-17 18:19:16] > sched_cmds cog ready
+[2021-08-17 18:19:16] > trigger_cmds cog ready
+[2021-08-17 18:19:17] >>Bot Ready<<
