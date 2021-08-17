@@ -30,6 +30,8 @@ def main():
                 subprocess.check_call('git pull', shell=True)
             except subprocess.CalledProcessError:
                 raise OSError("Could not update the bot!")
+        else:
+            print("No bot updates found!!")
 
 
 if __name__ == '__main__':
