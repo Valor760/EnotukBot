@@ -1,6 +1,4 @@
 import subprocess
-import sys
-import platform
 
 def y_n(q):
     while True:
@@ -20,9 +18,9 @@ def main():
 
         sp = subprocess.check_output('git status --porcelain', shell=True, universal_newlines=True)
         if sp:
-            oshit = y_n('You have modified files that are tracked by Git (e.g the bot\'s source files).\n'
-                        'Should we try resetting the repo? You will lose local modifications.')
-            if oshit:
+            # oshit = y_n('You have modified files that are tracked by Git (e.g the bot\'s source files).\n'
+            #             'Should we try resetting the repo? You will lose local modifications.')
+            if False:
                 try:
                     subprocess.check_call('git reset --hard', shell=True)
                 except subprocess.CalledProcessError:
