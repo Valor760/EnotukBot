@@ -13,7 +13,7 @@ def update_library():
 
     elif platform.system() == 'Windows':
         try:
-            subprocess.check_call('"{}" -m pip install --no-warn-script-location --user -U -r requirements.txt'.format(sys.executable), shell=True)
+            subprocess.check_call('"{}" -m pip install --no-warn-script-location -U -r requirements.txt'.format(sys.executable), shell=True)
         except subprocess.CalledProcessError:
             raise OSError("Could not update libraries.".format(sys.executable))
 
