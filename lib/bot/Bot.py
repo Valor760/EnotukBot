@@ -218,7 +218,7 @@ class Bot(TwitchBotBase):
         if user_role == 'mods':
             await ctx.channel.send(f"@{ctx.author.name} вы не можете замутить модератора!")
 
-        elif user_on_timeout in self.vips:
+        elif user_on_timeout in self.vips or user_role == 'vips':
             await ctx.channel.send(f"@{ctx.author.name} вы не можете замутить ВИПа!")
 
         elif user_role == 'streamer':
@@ -264,12 +264,16 @@ class Bot(TwitchBotBase):
 
 
     async def check_on_user_role(self, user_on_timeout):
-        chatters = await self.get_chatters('ehot1k')
+        chatters = await self.get_chatters('enoootuuuk')
         mods = [chatter.lower() for chatter in chatters[4]]
+        vips = [chatter.lower() for chatter in chatters[3]]
         user_on_timeout = user_on_timeout.replace('@', '').replace(',', '')
 
         if user_on_timeout.lower() in mods:
             return 'mods'
+
+        elif user_on_timeout.lower() in vips:
+            return 'vips'
 
         elif user_on_timeout.lower() == 'ehot1k':
             return "streamer"
