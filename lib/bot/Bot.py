@@ -63,6 +63,13 @@ class Bot(TwitchBotBase):
         self.words_on_cooldown = []
         self.cmds_on_cooldown = []
 
+        self.vips = []
+        with open("././data/db/vips.txt", 'r') as f:
+            while(True):
+                line = f.readline()
+                if line == '': break
+                self.vips.append(line.replace("\n", ''))
+
         db.autosave(self.scheduler)
 
         super().__init__(
@@ -121,11 +128,12 @@ class Bot(TwitchBotBase):
 
         log(f"[{message.author.name}]:   {message.content}", True)
 
-        if 'custom-reward-id' in message.tags:
+        if 'VIP' in message.content and message.author.name.lower() == 'ehot1k':
+            await self.add_vip(message.content.split(' ')[2].lower())
 
+        if 'custom-reward-id' in message.tags:
             if message.tags['custom-reward-id'] == '94d550f4-aa87-4684-9b0d-09a65857eca9':
                 await self.points_timeout(message)
-
             elif message.tags['custom-reward-id'] == 'd6dd0097-ab41-4fbf-bc19-16591dd72682':
                 await self.points_timeout_self(message)
 
@@ -136,7 +144,6 @@ class Bot(TwitchBotBase):
             cmd = message.content.split(' ')[0].lower()
             msg = message.content.split(' ')[1:]
             message.content = cmd + " " + self.convert_to_str(msg)
-
             if message.content.split(' ')[0].replace('!', '') in self.cmds_on_cooldown:
                 await message.channel.send(f'@{message.author.name} команда "{message.content.split(" ")[0].replace("!", "")}" в кд!')
             else:
@@ -148,7 +155,14 @@ class Bot(TwitchBotBase):
         await self.send_periodic_msg(message)
 
 
-    def check_mod(self, ctx):
+    async def add_vip(self, username: str):
+        if not username in self.vips:
+            self.vips.append(username)
+            with open("../../data/db/vips.txt", 'a') as f:
+                f.write(username + '\n')
+
+
+    def check_mod(self, ctx) -> bool:
         if ctx.author.is_mod or ctx.author.name.lower() == 'valor760':
             return True
         else:
@@ -194,8 +208,7 @@ class Bot(TwitchBotBase):
     # Таймаут на 10 минут за поинты выбранного человека
     async def points_timeout(self, ctx):
         user_on_timeout = ctx.content.split(' ')[0].lower()
-        user_on_timeout = user_on_timeout.replace(',', '')
-        user_on_timeout = user_on_timeout.replace('@', '')
+        user_on_timeout = user_on_timeout.replace(',', '').replace('@', '')
 
         log(f"User timeout(points): {user_on_timeout}\n"
             f"[{ctx.author.name}]:   {ctx.content}", False)
@@ -205,14 +218,11 @@ class Bot(TwitchBotBase):
         if user_role == 'mods':
             await ctx.channel.send(f"@{ctx.author.name} вы не можете замутить модератора!")
 
-        elif user_role == 'vips':
+        elif user_on_timeout in self.vips:
             await ctx.channel.send(f"@{ctx.author.name} вы не можете замутить ВИПа!")
 
         elif user_role == 'streamer':
             await ctx.channel.send(f"@{ctx.author.name} вы не можете замутить стримера!")
-
-        elif user_role == 'not_in_chat':
-            await ctx.channel.send(f"@{ctx.author.name} пользователя нет в чате, или твич еще не обновил его присутствие!")
 
         else:
             cur_day = int(datetime.utcnow().strftime("%d"))
@@ -226,7 +236,7 @@ class Bot(TwitchBotBase):
                            cur_day, cur_month, cur_year, user_on_timeout)
                 db.commit()
 
-                await ctx.channel.timeout(user_on_timeout, reason = "таймаут за поинты")
+                await ctx.channel.timeout(user_on_timeout, reason = "Таймаут за поинты")
                 await sleep(0.5)
                 await ctx.channel.send(f"{user_on_timeout} получил мут на 10 минут! Кто следующий?")
 
@@ -244,7 +254,7 @@ class Bot(TwitchBotBase):
                                cur_day, cur_month, cur_year, user_on_timeout)
                     db.commit()
 
-                    await ctx.channel.timeout(user_on_timeout, reason = "таймаут за поинты")
+                    await ctx.channel.timeout(user_on_timeout, reason = "Таймаут за поинты")
                     await sleep(0.5)
                     await ctx.channel.send(f"{user_on_timeout} получил мут на 10 минут! Кто следующий?")
 
@@ -254,23 +264,16 @@ class Bot(TwitchBotBase):
 
 
     async def check_on_user_role(self, user_on_timeout):
-        chatters = await self.get_chatters('enoootuuuk')
+        chatters = await self.get_chatters('ehot1k')
         mods = [chatter.lower() for chatter in chatters[4]]
-        vips = [chatter.lower() for chatter in chatters[3]]
-        regular_users = [chatter.lower() for chatter in chatters[1]]
         user_on_timeout = user_on_timeout.replace('@', '').replace(',', '')
 
         if user_on_timeout.lower() in mods:
             return 'mods'
 
-        elif user_on_timeout.lower() in vips:
-            return 'vips'
-
-        elif user_on_timeout.lower() == 'enoootuuuk':
+        elif user_on_timeout.lower() == 'ehot1k':
             return "streamer"
 
-        elif user_on_timeout.lower() not in regular_users:
-            return 'not_in_chat'
 
 
     async def points_timeout_self(self, ctx):

@@ -278,6 +278,17 @@ class cmdHelp:
         else:
             return f'{min} минут '
 
+
+    @command(aliases=['addvip', 'вип', 'vip'])
+    async def cmd_addvip_adm(self, ctx, username: str):
+        if self.bot.check_mod(ctx):
+            username = username.replace('@', '').lower()
+            if username in self.bot.vips:
+                await ctx.channel.send(f"@{ctx.author.name} пользователь {username} уже ВИП!")
+            else:
+                self.bot.add_vip(username)
+                await ctx.channel.send(f"@{ctx.author.name} пользователь {username} добавлен в базу ВИПов!")
+
     # @command(aliases=['test'])
     # async def cmd_test(self, ctx, cmd_name = ''):
     #     qwe = await self.bot.get_chatters("enoootuuuk")
